@@ -54,8 +54,8 @@ PIKLE_FOLDER_NAME_KEY = "prediction_files"
 
 # Database related variables
 DATABASE_CLIENT_URL_KEY = "mongodb://localhost:27017/?readPreference=primary&ssl=false&directConnection=true"
-DATABASE_NAME_KEY = "Rental_Bike_Share_DB"
-DATABASE_COLLECTION_NAME_KEY = "Bike_Data"
+DATABASE_NAME_KEY = "Shippmet_cost_prediction_db"
+DATABASE_COLLECTION_NAME_KEY = "shipment_cost"
 DATABASE_TRAINING_COLLECTION_NAME_KEY = "Training"
 DATABASE_TEST_COLLECTION_NAME_KEY = "Test"
 
