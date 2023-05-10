@@ -1,0 +1,89 @@
+FileName: "dataset"
+
+NumberOfColumns: 33
+
+ColumnNames:
+  ID: int64
+  Project_Code: object
+  PQ: object
+  PO/SO: object
+  ASN/DN: object
+  Country: object
+  Managed_By: object
+  Fulfill_Via: object
+  Vendor_INCO_Term: object
+  Shipment_Mode: object
+  PQ_First_Sent_to_Client_Date: object
+  PO_Sent_to_Vendor_Date: object
+  Scheduled_Delivery_Date: object
+  Delivered_to_Client_Date: object
+  Delivery_Recorded_Date: object
+  Product_Group: object
+  Sub_Classification: object
+  Vendor: object
+  Item_Description: object
+  Molecule/Test_Type: object
+  Brand: object
+  Dosage: object
+  Dosage_Form: object
+  Unit_of_Measure_(Per_Pack): int64
+  Line_Item_Quantity: int64
+  Line_Item_Value: float64
+  Pack_Price: float64
+  Unit_Price: float64
+  Manufacturing_Site: object
+  First_Line_Designation: object
+  Weight_(Kilograms): object
+  Freight_Cost_(USD): object
+  Line_Item_Insurance_(USD): float64
+
+
+target_column: Freight_Cost_(USD)
+
+date_columns:
+  - PQ_First_Sent_to_Client_Date
+  - PO_Sent_to_Vendor_Date
+  - Scheduled_Delivery_Date
+  - Delivered_to_Client_Date
+  - Delivery_Recorded_Date
+
+numerical_columns:
+  - Weight_Kilograms_Clean
+  - Unit_of_Measure_(Per_Pack)
+  - Line_Item_Quantity
+  - Pack_Price
+  - Unit_Price
+
+string_columns:
+- Item_Description
+- Molecule/Test_Type
+- Dosage 
+- Manufacturing_Site
+  
+categorical_columns:
+  - shipment_mode_encoded
+  - manufacturing_site_encoded
+  - country_encoded
+  - Dosage_Form_encoded
+  - First_Line_Designation_encoded
+  - fulfill_via_encoded
+  - Sub_Classification_encoded
+  - brand_encoded
+
+
+Columns_remaining :
+  Country: category 
+  Fulfill_Via: category
+  Shipment_Mode: category
+  Product_Group: category
+  Sub_Classification: category
+  Vendor: category
+  Brand: category
+  Dosage_Form: category
+  Unit_of_Measure_(Per_Pack): Float64
+  Line_Item_Quantity: Float64
+  Pack_Price: Float64
+  Unit_Price: Float64
+  First_Line_Designation: category
+  Freight_Cost_USD_Clean: Float64
+  Weight_Kilograms_Clean: Float64

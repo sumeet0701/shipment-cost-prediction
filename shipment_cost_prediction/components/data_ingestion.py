@@ -108,8 +108,8 @@ class DataIngestion:
             self.db.insertall(test_set.to_dict("records"))
             
             # Setting paths for train and test data
-            train_file_path = os.path.join(self.data_ingestion_config.ingested_train_dir,"train.csv")
-            test_file_path = os.path.join(self.data_ingestion_config.ingested_test_dir,"test.csv")
+            train_file_path = os.path.join(self.data_ingestion_config.ingested_train_dir,file_name)
+            test_file_path = os.path.join(self.data_ingestion_config.ingested_test_dir,file_name)
 
             if train_set is not None:
                 os.makedirs(self.data_ingestion_config.ingested_train_dir,exist_ok=True)
