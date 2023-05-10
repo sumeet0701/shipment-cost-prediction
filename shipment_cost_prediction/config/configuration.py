@@ -83,6 +83,43 @@ class Configuration:
             raise CustomException(e,sys) from e
         
     
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        try:
+            artifact_dir = self.get_training_pipeline_config.artifact_dir
+            data_transformation_artifact_dir = os.path.join(artifact_dir,
+                                                        DATA_TRANSFORMATION_ARTIFACT_DIR,
+                                                        self.time_stamp)
+            
+            data_transformation_config = self.config_info.get[DATA_TRANSFORMATION_CONFIG_KEY]
+
+            preprocessed_object_file_path = os.path.join(data_transformation_artifact_dir,
+                                data_transformation_config[DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY],
+                                data_transformation_config[DATA_TRANSFORMATION_PREPROCESSING_FILE_NAME_KEY])
+
+            feature_engineering_object_file_path = os.path.join(data_transformation_artifact_dir,
+                                data_transformation_config[DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY],
+                                data_transformation_config[DATA_TRANSFORMATION_FEATURE_ENGINEERING_FILE_NAME_KEY])
+
+            transformed_train_dir = os.path.join(data_transformation_artifact_dir,
+                                data_transformation_config[DATA_TRANSFORMATION_DIR_NAME_KEY],
+                                data_transformation_config[DATA_TRANSFORMATION_TRAIN_DIR_NAME_KEY])
+
+            transformed_test_dir = os.path.join(data_transformation_artifact_dir,
+                                data_transformation_config[DATA_TRANSFORMATION_DIR_NAME_KEY],
+                                data_transformation_config[DATA_TRANSFORMATION_TEST_DIR_NAME_KEY])
+
+            data_transformation_config = DataTransformationConfig(transformed_train_dir=transformed_train_dir,
+                                                    transformed_test_dir=transformed_test_dir,
+                                                    preprocessed_object_file_path=preprocessed_object_file_path,
+                                                    feature_engineering_object_file_path=feature_engineering_object_file_path)
+            
+            
+            logging.info(f"Data Transformation Config: {data_transformation_config}")
+            return data_transformation_config
+        except Exception as e:
+            raise CustomException(e,sys) from e
+        
+    
     def get_training_pipeline_config(self) -> TrainingPipelineConfig:
         try:
             training_pipeline_config = self.config_info[TRAINING_PIPELINE_CONFIG_KEY]

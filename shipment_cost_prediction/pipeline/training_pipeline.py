@@ -12,7 +12,7 @@ from shipment_cost_prediction.entity.artifact_entity import *
 from shipment_cost_prediction.entity.config_entity import *
 from shipment_cost_prediction.components.data_ingestion import DataIngestion
 from shipment_cost_prediction.components.data_validation import DataValidation
-#from shipment_cost_prediction.components.data_transformation import DataTransformation
+from shipment_cost_prediction.components.data_transformation import DataTransformation
 #from shipment_cost_prediction.components.model_trainer import ModelTrainer
 
 
@@ -46,14 +46,27 @@ class Pipeline():
         except Exception as e:
             raise CustomException(e, sys) from e
     
+    def start_data_transformation(self,data_ingestion_artifact: DataIngestionArtifact,
+                                       data_validation_artifact: DataValidationArtifact) -> DataTransformationArtifact:
+        try:
+            data_transformation = DataTransformation(
+                data_transformation_config = self.config.get_data_transformation_config(),
+                data_ingestion_artifact = data_ingestion_artifact,
+                data_validation_artifact = data_validation_artifact)
+
+            return data_transformation.initiate_data_transformation()
+        except Exception as e:
+            raise CustomException(e,sys) from e
+    
     def run_pipeline(self):
         try:
              #data ingestion
 
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
-            #data_transformation_artifact = self.start_data_transformation(data_ingestion_artifact=data_ingestion_artifact,
-                                                            # data_validation_artifact=data_validation_artifact)
+            data_transformation_artifact = self.start_data_transformation(
+                data_ingestion_artifact=data_ingestion_artifact,
+                data_validation_artifact=data_validation_artifact)
             #model_trainer_artifact = self.start_model_training(data_transformation_artifact=data_transformation_artifact)  
 
          
