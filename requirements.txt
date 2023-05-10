@@ -14,5 +14,7 @@ dnspython
 xgboost
 optuna
 evidently
+skopt
+scikit-optimize
 
 -e.

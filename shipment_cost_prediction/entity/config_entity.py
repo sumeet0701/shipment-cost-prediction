@@ -27,7 +27,17 @@ DatabaseConfig = namedtuple("DatabaseConfig",[
     "training_collection_name",
     "test_collection_name"])
 
+
+
+ModelEvaluationConfig = namedtuple("ModelEvaluationConfig", [
+    "model_evaluation_file_path",
+    "time_stamp"])
+
+ModelPusherConfig = namedtuple("ModelPusherConfig", ["export_dir_path"])
+
+
 ModelTrainerConfig = namedtuple("ModelTrainerConfig",["trained_model_file_path"])
+
 
 
 TrainingPipelineConfig = namedtuple("TrainingPipelineConfig",["artifact_dir"])
