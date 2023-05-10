@@ -85,12 +85,12 @@ class Configuration:
     
     def get_data_transformation_config(self) -> DataTransformationConfig:
         try:
-            artifact_dir = self.get_training_pipeline_config.artifact_dir
-            data_transformation_artifact_dir = os.path.join(artifact_dir,
-                                                        DATA_TRANSFORMATION_ARTIFACT_DIR,
-                                                        self.time_stamp)
-            
-            data_transformation_config = self.config_info.get[DATA_TRANSFORMATION_CONFIG_KEY]
+            artifact_dir = self.training_pipeline_config.artifact_dir
+            data_transformation_artifact_dir = os.path.join(artifact_dir, 
+                                                            DATA_TRANSFORMATION_ARTIFACT_DIR, 
+                                                            self.time_stamp)
+
+            data_transformation_config = self.config_info[DATA_TRANSFORMATION_CONFIG_KEY]
 
             preprocessed_object_file_path = os.path.join(data_transformation_artifact_dir,
                                 data_transformation_config[DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY],
