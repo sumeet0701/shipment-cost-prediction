@@ -282,25 +282,27 @@ class ModelTrainer:
             logging.info(f"{'*'*20} Trained XGBoost Model Successfully!! {'*'*20}")
 
             logging.info(f"{'*'*20} Training Random Forest Model {'*'*20}")
-            rf_obj = self.Random_Forest_Regressor(x_train,y_train)
+            #rf_obj = self.Random_Forest_Regressor(x_train,y_train)
             logging.info(f"{'*'*20} Trained Random Forest Model Successfully!! {'*'*20}")
 
             logging.info("***Objects for model obtained!!! Now calcalating R2 score for model evaluation***")
-            rf_r2_train = r2_score(y_train,rf_obj.predict(x_train))
+            #rf_r2_train = r2_score(y_train,rf_obj.predict(x_train))
             xgb_r2_train = r2_score(y_train,xgb_obj.predict(x_train))
-            logging.info(f"R2 score for Training set ---> Random Forest: {rf_r2_train} || XG Boost: {xgb_r2_train}")
+            logging.info(f"R2 score for Training set ---> XG Boost: {xgb_r2_train}")
             
-            rf_r2_test = r2_score(y_test, rf_obj.predict(x_test))
+            #rf_r2_test = r2_score(y_test, rf_obj.predict(x_test))
             xgb_r2_test = r2_score(y_test, xgb_obj.predict(x_test))
-            logging.info(f"R2 score for Testing set ---> Random Forest : {rf_r2_test} || XGBoost : {xgb_r2_test}")
-
-            if xgb_r2_test > rf_r2_test:
+            logging.info(f"R2 score for Testing set --->  XGBoost : {xgb_r2_test}")
+           
+            '''
+            #if xgb_r2_test > rf_r2_test:
                 logging.info("XGBoost Model Accepted!!!")
                 return xgb_obj
-            else:
+            #else:
                 logging.info("Random Forest Model Accepted!!!")
                 return rf_obj
-
+            '''
+            return xgb_obj
         except Exception as e:
             raise CustomException(e,sys) from e
     
