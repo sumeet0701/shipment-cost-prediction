@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  
+</head>
+
+<body>
+ <div class="login">
+	<h1>Shipping Price Prediction</h1>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict')}}"method="post">
+      <label for="brand">Choose a brand:</label>
+      <select id="brand" name="brand">
+        <option value="Uni-Gold">Uni-Gold</option>
+        <option value="Others">Others</option>
+        <option value="Kaletra">Kaletra</option>
+        <option value="Determine">Determine</option>
+        <option value="Aluvia">Aluvia</option>
+      </select>
+
+      <label for="country">Choose a country:</label>
+      <select id="country" name="country">
+        <option value="Others">Others</option>
+        <option value="Mozambique">Mozambique</option>
+        <option value="South Africa">South Africa</option>
+        <option value="CÃte dIvoire">CÃte dIvoire</option>
+        <option value="Nigeria">Nigeria</option>
+        <option value="Zimbabwe">Zimbabwe</option>
+        <option value="Uganda">Uganda</option>
+        <option value="Vietnam">Vietnam</option>
+        <option value="Rwanda">Rwanda</option>
+        <option value="Haiti">Haiti</option>
+        <option value="Tanzania">Tanzania</option>
+      </select>
+      <label for="dosage_form">Choose a dosage_form:</label>
+      <select id="dosage_form" name="dosage_form">
+        <option value="Others">Tablet - FDC</option>
+        <option value="Mozambique">Test kit</option>
+        <option value="South Africa">Oral solution</option>
+        <option value="CÃte dIvoire">Capsule</option>
+        <option value="Nigeria">Others</option>
+      </select>
+      <label for="first_line_designation">Choose a first_line_designation:</label>
+      <select id="first_line_designation" name="first_line_designation">
+        <option value="Yes">Yes</option>
+        <option value="no">no</option>
+      </select>
+      <label for="fulfill_via">Choose a fulfill_via:</label>
+      <select id="fulfill_via" name="fulfill_via">
+        <option value="Direct Drop">Direct Drop</option>
+        <option value="Others">Others</option>
+      </select>
+      <!-- <input type="text" name="fullfill" placeholder="fullfill" required="required" step="any"/> -->
+      <label for="managed_by">Choose a managed_by:</label>
+      <select id="managed_by" name="managed_by">
+        <option value="Haiti Field Office">Haiti Field Office</option>
+        <option value="Ethiopia Field Office">Ethiopia Field Office</option>
+      </select>
+      <label for="product_group">Choose a product_group:</label>
+      <select id="product_group" name="product_group">
+        <option value="HRDT">HRDT</option>
+        <option value="ANTM">ANTM</option>
+        <option value="MRDT">MRDT</option>
+        <option value="ACT">ACT</option>
+      </select>
+      <label for="shipment_mode">Choose a shipment_mode:</label>
+      <select id="shipment_mode" name="shipment_mode">
+        <option value="Air">Air</option>
+        <option value="Ocean">Ocean</option>
+        <option value="Air Charter">Air Charter</option>
+      </select>
+      <label for="sub_classification">Choose a sub_classification:</label>
+      <select id="sub_classification" name="sub_classification">
+        <option value="HIV test">HIV test</option>
+        <option value="Pediatric">Pediatric</option>
+        <option value="HIV test - Ancillary">HIV test - Ancillary</option>
+        <option value="ACT">ACT</option>
+      </select>
+
+        <input type="number" name="dosage" placeholder="dosage" required="required" step="any"/>
+        <input type="number" name="freight_cost" placeholder="freight_cost" required="required" step="any"/>
+        <input type="number" name="line_item_insurance" placeholder="line_item_insurance" required="required" step="any"/>
+        <input type="number" name="line_item_quantity" placeholder="line_item_quantity" required="required" step="any"/>
+        <input type="number" name="line_item_value" placeholder="line_item_value" required="required" step="any"/>
+        <input type="number" name="pack_price" placeholder="pack_price" required="required" step="any"/>
+        <input type="number" name="unit_of_measure" placeholder="unit_of_measure" required="required" step="any"/>
+        <input type="number" name="unit_price" placeholder="unit_price" required="required" step="any"/>
+        <input type="number" name="weight" placeholder="weight" required="required" step="any"/>
+        
+        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+
+   <br>
+   <br>
+   {{ prediction_text }}
+
+ </div>
+
+
+</body>
+</html>
