@@ -38,7 +38,8 @@ ColumnNames:
   Line_Item_Insurance_(USD): float64
 
 
-target_column: Freight_Cost_USD_Clean
+target_column: 
+  - Freight_Cost_USD_Clean
 
 numerical_columns:
   - Pack_Price

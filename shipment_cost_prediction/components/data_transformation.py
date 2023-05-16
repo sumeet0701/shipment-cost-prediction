@@ -1,12 +1,13 @@
 from shipment_cost_prediction.logger import logging
 from shipment_cost_prediction.exception import CustomException
 from shipment_cost_prediction.entity.config_entity import DataTransformationConfig
-from shipment_cost_prediction.entity.artifact_entity import *
+from shipment_cost_prediction.entity.artifact_entity import DataIngestionArtifact
+from shipment_cost_prediction.entity.artifact_entity import DataValidationArtifact
+from shipment_cost_prediction.entity.artifact_entity import DataTransformationArtifact
 from shipment_cost_prediction.constant import *
 from shipment_cost_prediction.utils.utils import read_yaml_file
 from shipment_cost_prediction.utils.utils import save_data
 from shipment_cost_prediction.utils.utils import save_object
-
 
 from sklearn.preprocessing import RobustScaler
 from sklearn.preprocessing import FunctionTransformer
@@ -29,11 +30,13 @@ import re
 class Feature_Engineering(BaseEstimator, TransformerMixin):
     
     def __init__(self,numerical_columns,categorical_columns,target_columns,drop_columns):
+        
         """
-        This class applies necessary Feature Engneering for Shipment cost prediction Data
+        This class applies necessary Feature Engneering for Rental Bike Share Data
         """
         logging.info(f"\n{'*'*20} Feature Engneering Started {'*'*20}\n\n")
-
+        
+        
         self.numerical_columns = numerical_columns
         self.categorical_columns = categorical_columns
         self.target_columns = target_columns
@@ -52,7 +55,7 @@ class Feature_Engineering(BaseEstimator, TransformerMixin):
                         
             
             # x.to_csv('Before_Encoding.csv', index=False)
-            logging.info(f"Columns before encoding: {x.columns}")
+           # logging.info(f"Columns before encoding: {x.columns}")
             
             # Print information about each feature to be encoded
             for feature in Encode_Features:
@@ -112,10 +115,13 @@ class Feature_Engineering(BaseEstimator, TransformerMixin):
                     f" >>>>>>>>>>>>  Columns Modififcation Complete  <<<<<<<<<<")
            
             return x
+                
+            
+
+        
         except Exception as e:
             raise CustomException(e,sys) from e 
         
-
     def drop_columns(self,x):
         try:
             
@@ -131,10 +137,21 @@ class Feature_Engineering(BaseEstimator, TransformerMixin):
                     'First_Line_Designation', 'Weight_(Kilograms)', 'Freight_Cost_(USD)',
                     'Line_Item_Insurance_(USD)']
 
+            columns_to_drop=self.columns_to_drop
             # specify columns to drop initially
-            columns_to_drop = self.drop_columns
+            #columns_to_drop = ['ID', 'Project_Code', 'PQ', 'PO/SO', 'ASN/DN', 'Managed_By', 'Vendor_INCO_Term',
+            #                'PQ_First_Sent_to_Client_Date', 'PO_Sent_to_Vendor_Date',
+            #                'Scheduled_Delivery_Date', 'Delivered_to_Client_Date',
+             #               'Delivery_Recorded_Date', 'Product_Group','Line_Item_Value',
+             #               'Vendor', 'Item_Description', 'Molecule/Test_Type', 'Dosage',
+              #              'Weight_(Kilograms)', 'Freight_Cost_(USD)','Line_Item_Insurance_(USD)','Manufacturing_Site','Unit_of_Measure_(Per_Pack)','Dosage_Form']
+
             # drop the specified columns from x
             x.drop(columns=columns_to_drop, inplace=True)
+            
+            logging.info(f"Columns Dropped {columns_to_drop}")
+
+            
             logging.info("Drop Columns Complete")
             
             return x
@@ -168,11 +185,18 @@ class Feature_Engineering(BaseEstimator, TransformerMixin):
                 x['Brand']=x['Brand'].fillna(mode[0])
                 logging.info('Filled missing values in column "Brand" with mode value:', mode[0])
 
+                            
+
             return x
+    
+            
+    
+            
+ 
+        
         except Exception as e:
             raise CustomException(e,sys) from e 
         
-
     def outlier(self,x):
         try:
             logging.info("Outlier Detection")
@@ -290,7 +314,6 @@ class Feature_Engineering(BaseEstimator, TransformerMixin):
             # Filling Missing Data 
             data= self.Missing_fills(data)
             
-            
             # Data Modification 
             data = self.data_modification(data)
             
@@ -298,13 +321,9 @@ class Feature_Engineering(BaseEstimator, TransformerMixin):
             
             data = self.outlier(data)
             
-            
-            
-
             # Perform map encoding
             data = self.Map_encoding(data)
            
-
             #data.to_csv("data_modiefied.csv",index=False)
             logging.info('Data Modified  Completed and Saved ')
             
@@ -320,17 +339,29 @@ class Feature_Engineering(BaseEstimator, TransformerMixin):
     def transform(self,X,y=None):
         try:
             X = self.data_wrangling(X)
+            
             numerical_columns = self.numerical_columns
             categorical_columns=self.categorical_columns
             target_column=self.target_columns
             
             
             col = numerical_columns+categorical_columns+target_column
+
+            #col =['Pack_Price', 'Unit_Price', 'Weight_Kilograms_Clean',
+            # 'Line_Item_Quantity','Fulfill_Via', 'Shipment_Mode','Country','Brand',
+            # 'Sub_Classification',  'First_Line_Designation','Freight_Cost_USD_Clean']
+   
+            
             print("\n")
             logging.info(f"New Column Order {col}")
             print("\n")
             X = X[col]
             X.to_csv('Data_Transform Complete.csv', index=False)
+           
+            
+                
+
+            
             arr = X.values
             
             return arr
@@ -343,6 +374,8 @@ class Feature_Engineering(BaseEstimator, TransformerMixin):
 
 
 class DataTransformation:
+    
+    
     def __init__(self, data_transformation_config: DataTransformationConfig,
                     data_ingestion_artifact: DataIngestionArtifact,
                     data_validation_artifact: DataValidationArtifact):
@@ -351,15 +384,14 @@ class DataTransformation:
             self.data_transformation_config = data_transformation_config
             self.data_ingestion_artifact = data_ingestion_artifact
             self.data_validation_artifact = data_validation_artifact
-
-             ## Accesssing Column Labels 
+            
+            ## Accesssing Column Labels 
             self.schema_file_path = self.data_validation_artifact.schema_file_path
             self.schema = read_yaml_file(file_path=self.schema_file_path)
             self.target_column_name = self.schema[TARGET_COLUMN_KEY]
             self.numerical_columns = self.schema[NUMERICAL_COLUMN_KEY] 
             self.categorical_columns = self.schema[CATEGORICAL_COLUMN_KEY]
             self.drop_columns=self.schema[DROP_COLUMN_KEY]
-
         except Exception as e:
             raise CustomException(e,sys) from e
         
@@ -367,19 +399,28 @@ class DataTransformation:
     def get_feature_engineering_object(self):
         try:
             
-            feature_engineering = Pipeline(steps = [("fe",Feature_Engineering(
-                numerical_columns=self.numerical_columns,
-                categorical_columns=self.categorical_columns,
-                target_columns=self.target_column_name,
-                drop_columns=self.drop_columns))])
-            
+            feature_engineering = Pipeline(steps = [("fe",Feature_Engineering(numerical_columns=self.numerical_columns,
+                                                                            categorical_columns=self.categorical_columns,
+                                                                            target_columns=self.target_column_name,
+                                                                            drop_columns=self.drop_columns))])
             return feature_engineering
         except Exception as e:
             raise CustomException(e,sys) from e
         
     def get_data_transformer_object(self):
         try:
+
+
+       
             logging.info('Creating Data Transformer Object')
+            
+            # Define the numerical and categorical columns in your dataset
+            #numerical_columns = ['Pack_Price', 'Unit_Price', 'Weight_Kilograms_Clean',
+             #                    'Line_Item_Quantity']
+            
+           # categorical_columns = ['Fulfill_Via', 'Shipment_Mode', 'Country','Brand',
+             #                   'Sub_Classification',  'First_Line_Designation']
+
 
             numerical_columns = self.numerical_columns
             categorical_columns =self.categorical_columns
@@ -412,19 +453,20 @@ class DataTransformation:
 
     def initiate_data_transformation(self):
         try:
+            
             logging.info(f"Obtaining training and test file path.")
-            train_file_path =  self.data_validation_artifact.validated_train_path
+            train_file_path = self.data_validation_artifact.validated_train_path
             test_file_path = self.data_validation_artifact.validated_test_path
-
+            
+            print(train_file_path)
+            print(test_file_path)
             logging.info(f"Loading training and test data as pandas dataframe.")
             train_df = pd.read_csv(train_file_path)
             test_df = pd.read_csv(test_file_path)
             
             # Reading schema file for columns details
-            schema_file_path = self.data_validation_artifact.schema_file_path
-            schema = read_yaml_file(file_path=schema_file_path)
             
-            logging.info(f"Extracting train column name {train_df.columns.to_list()}")
+            schema = read_yaml_file(file_path=self.schema_file_path)
 
             # Extracting target column name
             target_column_name = self.target_column_name
@@ -437,15 +479,14 @@ class DataTransformation:
             logging.info(f"Target Column :{target_column_name}")
             
             col = numerical_columns+categorical_columns+target_column_name
+            
             logging.info(f"All columns : {col}")
             print(col)
-
 
             logging.info(f"Obtaining feature engineering object.")
             fe_obj = self.get_feature_engineering_object()
             
             logging.info(f"Applying feature engineering object on training dataframe and testing dataframe")
-            
             
             logging.info(f"Feature Enineering - Train Data ")
             feature_eng_train_arr = fe_obj.fit_transform(train_df)
@@ -454,13 +495,21 @@ class DataTransformation:
             feature_eng_test_arr = fe_obj.transform(test_df)
             
             # Converting featured engineered array into dataframe
-            logging.info(f"Converting featured engineered array into dataframe.")            
-            logging.info(f"Columns for Feature Engineering : {col}")
+            logging.info(f"Converting featured engineered array into dataframe.")
+            
+            
+            #logging.info(f"Columns for Feature Engineering : {col}")
+            
             feature_eng_train_df = pd.DataFrame(feature_eng_train_arr,columns=col)
+            
             logging.info(f"Feature Engineering - Train Completed")
+            
             feature_eng_test_df = pd.DataFrame(feature_eng_test_arr,columns=col)
             
+            #logging.info(f" Columns in feature enginering test {feature_eng_test_df.columns}")
             logging.info(f"Saving feature engineered training and testing dataframe.")
+            
+            
             #feature_eng_train_df.to_csv('feature_eng_train_df.csv',index=False)
 
            
@@ -535,3 +584,5 @@ class DataTransformation:
 
     def __del__(self):
         logging.info(f"\n{'*'*20} Data Transformation log completed {'*'*20}\n\n")
+    
+   
