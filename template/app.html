@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shipment Price Prediction App</title>
+    <style>
+        body {
+            background-image: url('C:\Users\Sumeet Maheshwari\Desktop\end to end project\shipmet cost prediction\shipment-cost-prediction\static\img\bikeshare_Adobe.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            color: #fff;
+            font-family: Arial, sans-serif;
+          }
+          
+          .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: rgba(51, 51, 51, 0.7);
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+          }
+          .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+          }
+          
+          .input-container label {
+            margin-bottom: 0.5rem;
+          }
+          
+          .input-container select,
+          .input-container input[type="number"] {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 1rem;
+            max-width: 15rem;
+            text-align: center;
+          }
+        button {
+            background-color: #008CBA;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        button:hover {
+            background-color: #006F8B;
+        }
+        .output {
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Shipment Price Prediction App</h1>
+
+        <div class="input-container">
+            <label for="pack-price">Pack Price:</label>
+            <input type="number" id="pack-price" name="pack-price" required>
+        </div>
+
+        <div class="input-container">
+            <label for="unit-price">Unit Price:</label>
+            <input type="number" id="unit-price" name="unit-price" required>
+        </div>
+
+        <div class="input-container">
+            <label for="weight-kg">Weight (kg):</label>
+            <input type="number" id="weight-kg" name="weight-kg" required>
+        </div>
+
+        <div class="input-container">
+            <label for="line-item-quantity">Line Item Quantity:</label>
+            <input type="number" id="line-item-quantity" name="line-item-quantity" required>
+        </div>
+
+        <div class="input-container">
+            <label for="fulfill-via">Fulfillment Via:</label>
+            <select id="fulfill-via" name="fulfill-via" required>
+                <option value="">-- Select --</option>
+                <option value="From RDC">From RDC</option>
+                <option value="Direct Drop">Direct Drop</option>
+            </select>
+        </div>
+
+        <div class="input-container">
+            <label for="shipment-mode">Shipment Mode:</label>
+            <select id="shipment-mode" name="shipment-mode" required>
+                <option value="">-- Select --</option>
+                <option value="Truck">Truck</option>
+                <option value="Air">Air</option>
+                <option value="Air Charter">Air Charter</option>
+                <option value="Ocean">Ocean</option>
+            </select>
+        </div>
+
+        <div class="input-container">
+            <label for="country">Country:</label>
+            <select id="country" name="country" required>
+                <option value="">-- Select --</option>
+                <option value="Zambia">Zambia</option>
+                <option value="Ethiopia">Ethiopia</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Tanzania">Tanzania</option>
+                <option value="Cote d'Ivoire">Côte d'Ivoire</option>
+                <option value="Mozambique">Mozambique</option>
+                <option value="Others">Others</option>
+                <option value="Zimbabwe">Zimbabwe</option>
+                <option value="South Africa">South Africa</option>
+                <option value="Rwanda">Rwanda</option>
+                <option value="Haiti">Haiti</option>
+                <option value="Vietnam">Vietnam</option>
+                <option value="Uganda">Uganda</option>
+            </select>
+        </div>
+
+        <div class="input-container">
+            <label for="brand">Brand:</label>
+            <select id="brand" name="brand" required>
+                <option value="">-- Select --</option>
+                <option value="Generic">Generic</option>
+                <option value="Others">Others</option>
+                <option value="Determine">Determine</option>
+                <option value="Uni-Gold">Uni-Gold</option>
+            </select>
+        </div>
+
+        <div class="input-container">
+            <label for="sub-classification">Sub-Classification:</label>
+            <select id="sub-classification" name="sub-classification" required>
+                <option value="">-- Select --</option>
+                <option value="Adult">Adult</option>
+                <option value="Pediatric">Pediatric</option>
+                <option value="HIV test">HIV test</option>
+                <option value="HIV test - Ancillary">HIV test - Ancillary</option>
+                <option value="Malaria">Malaria</option>
+                <option value="ACT">ACT</option>
+            </select>
+        </div>
+
+        <div class="input-container">
+            <label for="first-line-designation">First Line Designation:</label>
+            <select id="first-line-designation" name="first-line-designation" required>
+                <option value="">-- Select --</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+        <button id="predict-btn">Predict Shipment Price</button>
+
+        <div class="output" id="output-div"></div>
+    </div>
+
+    <script>
+        const predictBtn = document.querySelector('#predict-btn');
+        const outputDiv = document.querySelector('#output-div');
+
+        predictBtn.addEventListener('click', () => {
+            // Get user input values
+            const packPrice = parseFloat(document.querySelector('#pack-price').value);
+            const unitPrice = parseFloat(document.querySelector('#unit-price').value);
+            const weightKg = parseFloat(document.querySelector('#weight-kg').value);
+            const lineItemQuantity = parseInt(document.querySelector('#line-item-quantity').value);
+            const fulfillVia = document.querySelector('#fulfill-via').value;
+            const shipmentMode = document.querySelector('#shipment-mode').value;
+            const country = document.querySelector('#country').value;
+            const brand = document.querySelector('#brand').value;
+            const subClassification = document.querySelector('#sub-classification').value;
+            const firstLineDesignation = document.querySelector('#first-line-designation').value;
+
+            // Validate user inputs
+            if (isNaN(packPrice) || isNaN(unitPrice) || isNaN(weightKg) || isNaN(lineItemQuantity) || 
+                !fulfillVia || !shipmentMode || !country || !brand || !subClassification || !firstLineDesignation) {
+                outputDiv.textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            // Make a prediction
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    Pack_Price: packPrice,
+                    Unit_Price: unitPrice,
+                    Weight_Kilograms_Clean: weightKg,
+                    Line_Item_Quantity: lineItemQuantity,
+                    Fulfill_Via: fulfillVia,
+                    Shipment_Mode: shipmentMode,
+                    Country: country,
+                    Brand: brand,
+                    Sub_Classification: subClassification,
+                    First_Line_Designation: firstLineDesignation
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    outputDiv.textContent = data.error;
+                } else {
+                    outputDiv.textContent = `The predicted shipment price is ${data.prediction.toFixed(2)}.`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                outputDiv.textContent = 'An error occurred while making the prediction.';
+            });
+        });
+    </script>
