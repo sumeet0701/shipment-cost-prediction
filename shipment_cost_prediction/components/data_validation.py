@@ -2,8 +2,10 @@ import os
 import sys 
 import json
 import pandas as pd
+import shutil
 
 from shipment_cost_prediction.config import *
+from shipment_cost_prediction.constant import *
 from shipment_cost_prediction.entity.config_entity import *
 from shipment_cost_prediction.entity.artifact_entity import *
 from shipment_cost_prediction.config import configuration
@@ -31,6 +33,11 @@ class DataValidation:
             self.test_data = IngestedDataValidation(
                 validate_path=self.data_ingestion_artifact.test_file_path, schema_path=self.schema_path)
             
+            self.train_path = self.data_ingestion_artifact.train_file_path
+            self.test_path = self.data_ingestion_artifact.test_file_path
+            
+            self.validated_train_path = self.data_validation_config.validated_train_path
+            self.validated_test_path =self.data_validation_config.validated_test_path
         
         except Exception as e:
             raise CustomException(e,sys) from e
@@ -89,8 +96,42 @@ class DataValidation:
                     f"Test_set status|is Test filename validated?: {is_test_filename_validated}|is test column names validated? {is_test_column_name_same}| whole missing columns? {is_test_missing_values_whole_column}")
 
                 if is_train_filename_validated  & is_train_column_name_same & is_train_missing_values_whole_column:
-                    pass
+                    ## Exporting Train.csv file 
+                    # Create the directory if it doesn't exist
+                    os.makedirs(self.validated_train_path, exist_ok=True)
+
+                    # Copy the CSV file to the validated train path
+                    shutil.copy(self.train_path, self.validated_train_path)
+                    self.validated_train_path=os.path.join(self.validated_train_path,FILE_NAME)
+                    # Log the export of the validated train dataset
+                    logging.info(f"Exported validated train dataset to file: [{self.validated_train_path}]")
+                                     
+                                     
+                                        
+                    ## Exporting test.csv file
+                    os.makedirs(self.validated_test_path, exist_ok=True)
+                    logging.info(f"Exporting validated train dataset to file: [{self.validated_train_path}]")
+                    os.makedirs(self.validated_test_path, exist_ok=True)
+                    # Copy the CSV file to the validated train path
+                    shutil.copy(self.test_path, self.validated_test_path)
+                    self.validated_test_path=os.path.join(self.validated_test_path,FILE_NAME)
+                    # Log the export of the validated train dataset
+                    logging.info(f"Exported validated test dataset to file: [{self.validated_test_path}]")
+                                        
+                    
+                    return validation_status,self.validated_train_path,self.validated_test_path
                 else:
+                    validation_status = False
+                    logging.info("Check yout Training Data! Validation Failed")
+                    raise ValueError(
+                        "Check your Training data! Validation failed")
+                
+
+            return validation_status,"NONE","NONE"
+        except Exception as e:
+                raise CustomException(e, sys) from e      
+        """
+            else:
                     validation_status = False
                     logging.info("Check yout Training Data! Validation Failed")
                     raise ValueError(
@@ -110,7 +151,7 @@ class DataValidation:
 
         except Exception as e:
             raise CustomException(e, sys) from e      
-    
+    """
     def get_train_test_df(self):
         try:
             train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
@@ -173,6 +214,8 @@ class DataValidation:
             data_validation_artifact = DataValidationArtifact(
                 schema_file_path=self.schema_path, 
                 is_validated=self.is_Validation_successfull(),
+                validated_train_path = self.validated_train_path,
+                validated_test_path= self.validated_test_path,
                 report_file_path=self.data_validation_config.report_file_path,
                 report_page_file_path=self.data_validation_config.report_page_file_path,
                 message="Data validation performed"
