@@ -8,6 +8,7 @@ CONFIG_FILE_NAME = "config.yaml"
 CONFIG_FILE_PATH = os.path.join(ROOT_DIR,CONFIG_DIR,CONFIG_FILE_NAME)
 
 CURRENT_TIME_STAMP = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
+FILE_NAME = "dataset"
 
 # Training pipeline related vaariables
 TRAINING_PIPELINE_CONFIG_KEY = "training_pipeline_config"
@@ -31,6 +32,9 @@ DATA_VALIDATION_SCHEMA_FILE_NAME_KEY = "schema_file_name"
 DATA_VALIDATION_SCHEMA_DIR_KEY = "schema_dir"
 DATA_VALIDATION_REPORT_FILE_NAME_KEY = "report_file_name"
 DATA_VALIDATION_REPORT_PAGE_FILE_NAME_KEY = "report_page_file_name"
+DATA_VALIDATION_VALID_DATASET ="validated_data"
+DATA_VALIDATION_TRAIN_FILE = "Train_data"
+DATA_VALIDATION_TEST_FILE ="Test_data"
 
 # Data Transformation related variables
 DATA_TRANSFORMATION_CONFIG_KEY = "data_transformation_config"
@@ -48,6 +52,8 @@ NUMERICAL_COLUMN_KEY = "numerical_columns"
 CATEGORICAL_COLUMN_KEY = "categorical_columns"
 STRING_COLUMN_KEY="string_columns"
 TARGET_COLUMN_KEY = "target_column"
+DROP_COLUMN_KEY ='drop_columns'
+
 
 PIKLE_FOLDER_NAME_KEY = "prediction_files"
 
@@ -60,8 +66,6 @@ DATABASE_TRAINING_COLLECTION_NAME_KEY = "Training"
 DATABASE_TEST_COLLECTION_NAME_KEY = "Test"
 
 
-
-PIKLE_FOLDER_NAME_KEY = "prediction_files"
 
 # Model Training related variables
 MODEL_TRAINER_CONFIG_KEY = "model_trainer_config"
