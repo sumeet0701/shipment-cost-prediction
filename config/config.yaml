@@ -15,6 +15,9 @@ data_validation_config:
   schema_file_name: schema.yaml
   report_file_name: report.json
   report_page_file_name: report.html
+  Train_data: Train_data
+  Test_data: Test_data
+  
 
 data_transformation_config:
   transformed_dir: transformed_data

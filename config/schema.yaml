@@ -38,52 +38,50 @@ ColumnNames:
   Line_Item_Insurance_(USD): float64
 
 
-target_column: Freight_Cost_(USD)
+target_column: Freight_Cost_USD_Clean
 
-date_columns:
+numerical_columns:
+  - Pack_Price
+  - Unit_Price
+  - Weight_Kilograms_Clean
+  - Line_Item_Quantity
+  
+categorical_columns:
+  - Fulfill_Via 
+  - Shipment_Mode
+  - Country
+  - Brand
+  - Sub_Classification
+  - First_Line_Designation
+
+drop_columns:
+  - ID
+  - Project_Code
+  - PQ
+  - PO/SO
+  - ASN/DN
+  - Managed_By
+  - Vendor_INCO_Term
   - PQ_First_Sent_to_Client_Date
   - PO_Sent_to_Vendor_Date
   - Scheduled_Delivery_Date
   - Delivered_to_Client_Date
   - Delivery_Recorded_Date
-
-numerical_columns:
-  - Weight_Kilograms_Clean
+  - Product_Group
+  - Line_Item_Value
+  - Vendor
+  - Item_Description
+  - Molecule/Test_Type
+  - Dosage
+  - Weight_(Kilograms)
+  - Freight_Cost_(USD)
+  - Line_Item_Insurance_(USD)
+  - Manufacturing_Site
   - Unit_of_Measure_(Per_Pack)
-  - Line_Item_Quantity
-  - Pack_Price
-  - Unit_Price
-
-string_columns:
-- Item_Description
-- Molecule/Test_Type
-- Dosage 
-- Manufacturing_Site
-  
-categorical_columns:
-  - shipment_mode_encoded
-  - manufacturing_site_encoded
-  - country_encoded
-  - Dosage_Form_encoded
-  - First_Line_Designation_encoded
-  - fulfill_via_encoded
-  - Sub_Classification_encoded
-  - brand_encoded
+  - Dosage_Form
 
 
-Columns_remaining :
-  Country: category 
-  Fulfill_Via: category
-  Shipment_Mode: category
-  Product_Group: category
-  Sub_Classification: category
-  Vendor: category
-  Brand: category
-  Dosage_Form: category
-  Unit_of_Measure_(Per_Pack): Float64
-  Line_Item_Quantity: Float64
-  Pack_Price: Float64
-  Unit_Price: Float64
-  First_Line_Designation: category
-  Freight_Cost_USD_Clean: Float64
-  Weight_Kilograms_Clean: Float64
+                              
+edited_column_labes :
+- Weight_Kilograms_Clean
+- Freight_Cost_USD_Clean
