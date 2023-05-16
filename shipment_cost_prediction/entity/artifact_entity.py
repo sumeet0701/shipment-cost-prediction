@@ -8,6 +8,8 @@ DataIngestionArtifact = namedtuple("DataIngestionArtifact",[
 
 DataValidationArtifact = namedtuple("DataValidationArtifact",[
     "schema_file_path",
+    "validated_train_path",
+    "validated_test_path",
     "report_file_path",
     "report_page_file_path",
     "is_validated",
