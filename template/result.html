@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shipmet Cost Prediction Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <style>
+        .sales-input {
+            padding-top: 20px;
+            padding-right: 20px;
+            font-weight: bold;
+            width: 100%;
+            background-color: #cce2f5;
+        }
+
+        .file-input {
+            font-weight: bold;
+            width: 40%;
+        }
+
+        .title {
+
+            text-align: center;
+            font-weight: bold;
+            border-radius: 50px;
+
+            font-size: 30px;
+            background-color: #33475b;
+            padding-top: 10px;
+            font-weight: bold;
+            padding-bottom: 10px;
+            color: #ffffff;
+            font-family: 'Lucida Sans';
+        }
+        
+        .class{
+            color: #f5ae0a;
+        }
+        .header2{
+            display: inline;
+            font-size: 35px;
+            color: #120f08;
+            font-weight: bold;
+            padding-left: 260px;
+            font-family: 'Gill Sans MT';
+        }
+        
+        .col{
+            padding-left: 50px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+    <div class="title">Shipment Cost Prediction Project</div>
+
+    
+    <div class="sales-input">
+        <!-- main row -->
+        <div class="row">
+            <!-- file input column -->
+            <div class="col file-input">
+                <form action="/bulk_predict" method="POST" enctype="multipart/form-data">
+                    <label for="">Upload dataset</label>
+                    <div class="input-group mb-3 my-2">
+                        <input type="file" multiple class="form-control" id="inputGroupFile01" name="files">
+                    </div>
+                    <center>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary my-2" type="submit">Predict</button>
+                        </div>
+                    </center>
+                </form>
+            </div>
+
+            <!-- user input column -->
+            <div class="col">
+                <!-- Alert Message -->
+                {% with message = get_flashed_messages(with_categories=true) %}
+                {% if message %}
+                {% for category, msg in message %}
+                <div class="message">
+                    <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                        {{msg}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <form action="/single_predict" method="POST">
+                    <!-- 1st row -->
+                    <div class="row">
+                        
+                        <div class="col">
+                            <label for="pack-price">Pack Price:</label>
+                            <input class = "form-control" type="number" id="pack-price" name="pack-price" required>
+                        </div>
+                
+                        <div class="col">
+                            <label for="unit-price">Unit Price:</label>
+                            <input class = "form-control" type="number" id="unit-price" name="unit-price" required>
+                        </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <label for="weight-kg">Weight (kg):</label>
+                            <input class = "form-control" type="number" id="weight-kg" name="weight-kg" required>
+                        </div>
+                
+                        <div class="col">
+                            <label for="line-item-quantity">Line Item Quantity:</label>
+                            <input class = "form-control" type="number" id="line-item-quantity" name="line-item-quantity" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row my-3">
+                        <div class="col">
+                            <label for="fulfill-via">Fulfillment Via:</label>
+                            <select class = "form-control" id="fulfill-via" name="fulfill-via" required>
+                                <option value="">-- Select --</option>
+                                <option value="From RDC">From RDC</option>
+                                <option value="Direct Drop">Direct Drop</option>
+                            </select>
+                        </div>
+                
+                        <div class="col">
+                            <label for="shipment-mode">Shipment Mode:</label>
+                            <select class = "form-control" id="shipment-mode" name="shipment-mode" required>
+                                <option value="">-- Select --</option>
+                                <option value="Truck">Truck</option>
+                                <option value="Air">Air</option>
+                                <option value="Air Charter">Air Charter</option>
+                                <option value="Ocean">Ocean</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row my-4">
+                        <div class="col">
+                            <label for="country">Country:</label>
+                            <select class = "form-control" id="country" name="country" required>
+                                <option value="">-- Select --</option>
+                                <option value="Zambia">Zambia</option>
+                                <option value="Ethiopia">Ethiopia</option>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="Tanzania">Tanzania</option>
+                                <option value="Cote d'Ivoire">Côte d'Ivoire</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Others">Others</option>
+                                <option value="Zimbabwe">Zimbabwe</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="Rwanda">Rwanda</option>
+                                <option value="Haiti">Haiti</option>
+                                <option value="Vietnam">Vietnam</option>
+                                <option value="Uganda">Uganda</option>
+                            </select>
+                        </div>
+                
+                        <div class="col">
+                            <label for="brand">Brand:</label>
+                            <select class = "form-control"  id="brand" name="brand" required>
+                                <option value="">-- Select --</option>
+                                <option value="Generic">Generic</option>
+                                <option value="Others">Others</option>
+                                <option value="Determine">Determine</option>
+                                <option value="Uni-Gold">Uni-Gold</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row my-5">
+                        <div class="col">
+                            <label for="sub-classification">Sub-Classification:</label>
+                            <select class = "form-control" id="sub-classification" name="sub-classification" required>
+                                <option value="">-- Select --</option>
+                                <option value="Adult">Adult</option>
+                                <option value="Pediatric">Pediatric</option>
+                                <option value="HIV test">HIV test</option>
+                                <option value="HIV test - Ancillary">HIV test - Ancillary</option>
+                                <option value="Malaria">Malaria</option>
+                                <option value="ACT">ACT</option>
+                            </select>
+                        </div>
+                
+                        <div class="col">
+                            <label for="first-line-designation">First Line Designation:</label>
+                            <select class = "form-control" aria-label="Default select example" id="first-line-designation" name="first-line-designation" required>
+                                <option value="">-- Select --</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                
+                    </div>
+
+                    <center>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary my-2" type="submit">Predict</button>
+                        </div>
+                    </center>
+
+                </form>
+                    
+            </div>
+
+            
+        </div>
+
+    </div>
+    
+    
+</body>
+
+</html>

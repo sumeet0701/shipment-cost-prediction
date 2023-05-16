@@ -1,41 +1,93 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template,request, send_file, redirect,url_for,flash
+from flask_cors import CORS, cross_origin
 from prediction.batch_prediction import batch_prediction
 from prediction.instance_prediction import instance_prediction_class
+from shipment_cost_prediction.pipeline.training_pipeline import Pipeline
+from shipment_cost_prediction.constant import *
+from shipment_cost_prediction.logger import logging
+import shutil
 
-input_file_path = "SCMS_Delivery_History_Dataset.csv"
+
+input_file_path = "dataset.csv"
 feature_engineering_file_path = "prediction_files/feat_eng.pkl"
 transformer_file_path = "prediction_files/preprocessed.pkl"
 model_file_path = "prediction_files/model.pkl"
 
-app = Flask(__name__,template_folder='template')
+app = Flask(__name__,template_folder = "templates")
+CORS(app)
+app.secret_key = APP_SECRET_KEY
 
-@app.route("/", methods=["GET"])
+@app.route("/", methods =["GET"])
+@cross_origin()
 def home():
     return render_template("result.html")
 
+@app.route("/bulk_predict", methods =["POST"])
+@cross_origin()
+def bulk_predict():
+    try:
+        file = request.files.get("files")
+        folder = PREDICTION_DATA_SAVING_FOLDER_KEY
 
-@app.route('/templates/index.html', methods=['POST'])
-def perform_batch_prediction():
-    # Perform batch prediction using the batch_prediction_function
-    batch_prediction.start_batch_prediction(input_file_path, model_file_path, transformer_file_path,
-                                            feature_engineering_file_path)
+        flash("File uploaded!!","success")
 
-    # Return the prediction result as a response
-    return "Batch Prediction Done"
+        if os.path.isdir(folder):
+            shutil.rmtree(folder)
+        os.mkdir(folder)
 
-@app.route('/instance-prediction', methods=['POST'])
-def perform_instance_prediction():
-    # Perform instance prediction using the instance_prediction_function
-    result = instance_prediction_class.predict_price_from_input()
+        file.save(os.path.join(folder,file.filename))
 
-    # Return the prediction result as JSON response
-    return jsonify(result)
+        pred = batch_prediction()
+        output_file = pred.initiate_bulk_prediction()
+        path = os.path.basename(output_file)
 
+        flash("Prediction File generated!!","success")
+        return send_file(output_file,as_attachment=True)
 
+    except Exception as e:
+        flash(f'Something went wrong: {e}', 'danger')
+        logging.error(e)
+        return redirect(url_for('home'))
 
-if __name__ == '__main__':
-    host = '0.0.0.0'  # Specify the host address you want to use
-    port = 5000  # Specify the port number you want to use
-    app.run(debug=True, host=host, port=port)
+@app.route("/single_predict", methods =["POST"])
+@cross_origin()
+def single_predict():
+    try:   
+        data = {"pack_price" : int(request.form['pack-price']),
+                "unit_price" : float(request.form['unit-price']),
+                "weight_kg" : float(request.form['weight-kg']),
+                "line_item_quantity" : int(request.form['line-item-quantity']),
+                "fulfill_via" : request.form['fulfill-via'],
+                "shipment_mode" : request.form['shipment-mode'],
+                "country" : request.form['country'],
+                "brand" : request.form['brand'],
+                "sub_classification" : request.form['sub-classification'],
+                "first_line_designation" : request.form['first-line-designation']}
+
+        pred = instance_prediction_class ()
+        output = pred.initiate_single_prediction(data)
+        flash(f"Predicted Demand for Bike for given conditions: {output}","success")
+        return redirect(url_for('home'))
+    except Exception as e:
+        flash(f'Something went wrong: {e}', 'danger')
+        logging.error(e)
+        return redirect(url_for('home'))
     
+
+@app.route("/start_train", methods=['GET', 'POST'])
+@cross_origin()
+def trainRouteClient():
+    try:
+        train_obj = Pipeline()
+        train_obj.run_training_pipeline() # training the model for the files in the table
+    except Exception as e:
+        flash(f'Something went wrong: {e}', 'danger')
+        logging.error(e)
+        return redirect(url_for('home'))
+
+
+if __name__=="__main__":
     
+    port = int(os.getenv("PORT",5000))
+    host = '0.0.0.0'
+    app.run(host=host,port=port,debug=True)
