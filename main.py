@@ -3,6 +3,7 @@ from flask_cors import CORS, cross_origin
 from prediction.batch_prediction import batch_prediction
 from prediction.instance_prediction import instance_prediction_class
 from shipment_cost_prediction.pipeline.training_pipeline import Pipeline
+from shipment_cost_prediction.pipeline.prediction_pipeline import Prediction_Pipeline
 from shipment_cost_prediction.constant import *
 from shipment_cost_prediction.logger import logging
 import shutil
@@ -13,7 +14,11 @@ feature_engineering_file_path = "prediction_files/feat_eng.pkl"
 transformer_file_path = "prediction_files/preprocessed.pkl"
 model_file_path = "prediction_files/model.pkl"
 
-app = Flask(__name__,template_folder = "templates")
+app = Flask(__name__,template_folder = "template")
+CORS(app)
+app.secret_key = APP_SECRET_KEY
+
+app = Flask(__name__)
 CORS(app)
 app.secret_key = APP_SECRET_KEY
 
@@ -37,7 +42,7 @@ def bulk_predict():
 
         file.save(os.path.join(folder,file.filename))
 
-        pred = batch_prediction()
+        pred = Prediction_Pipeline()
         output_file = pred.initiate_bulk_prediction()
         path = os.path.basename(output_file)
 
@@ -64,9 +69,9 @@ def single_predict():
                 "sub_classification" : request.form['sub-classification'],
                 "first_line_designation" : request.form['first-line-designation']}
 
-        pred = instance_prediction_class ()
+        pred = Prediction_Pipeline()
         output = pred.initiate_single_prediction(data)
-        flash(f"Predicted Demand for Bike for given conditions: {output}","success")
+        flash(f"Predicted Cost for Shipment for given conditions: {output}","success")
         return redirect(url_for('home'))
     except Exception as e:
         flash(f'Something went wrong: {e}', 'danger')
