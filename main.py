@@ -18,10 +18,6 @@ app = Flask(__name__,template_folder = "template")
 CORS(app)
 app.secret_key = APP_SECRET_KEY
 
-app = Flask(__name__)
-CORS(app)
-app.secret_key = APP_SECRET_KEY
-
 @app.route("/", methods =["GET"])
 @cross_origin()
 def home():
@@ -43,7 +39,7 @@ def bulk_predict():
         file.save(os.path.join(folder,file.filename))
 
         pred = Prediction_Pipeline()
-        output_file = pred.initiate_bulk_prediction()
+        output_file = pred.initiate_bulk_predictions()
         path = os.path.basename(output_file)
 
         flash("Prediction File generated!!","success")

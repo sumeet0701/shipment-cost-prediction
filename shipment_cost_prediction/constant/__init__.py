@@ -74,5 +74,5 @@ MODEL_TRAINER_TRAINED_MODEL_DIR = "trained_model_dir"
 MODEL_TRAINER_TRAINED_MODEL_FILE_NAME_KEY = "model_file_name"
 
 # Prediction Related variables
-PREDICTION_DATA_SAVING_FOLDER_KEY = "prediction_files"
+PREDICTION_DATA_SAVING_FOLDER_KEY = "predicted"
 APP_SECRET_KEY = "any random string"

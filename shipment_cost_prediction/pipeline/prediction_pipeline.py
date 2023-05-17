@@ -36,7 +36,7 @@ class Prediction_Pipeline:
                                                           "feat_eng.pkl"))
         self.preprocessing_obj = load_object(file_path= os.path.join(ROOT_DIR,
                                                                      PIKLE_FOLDER_NAME_KEY,
-                                                                     "preprocessing.pkl"))
+                                                                     "preprocessed.pkl"))
         self.model_obj = load_object(file_path= os.path.join(ROOT_DIR,
                                                              PIKLE_FOLDER_NAME_KEY,
                                                              "model.pkl"))
@@ -81,7 +81,7 @@ class Prediction_Pipeline:
                             'Line_Item_Insurance_(USD)']
                 
                 logging.info("Feature Engineering applied !!!")
-                featured_eng_data = pd.DataFrame(self.fe_obj.transform(data_df),columns=col)
+                featured_eng_data = pd.DataFrame(self.fe_obj.transform(data_df),columns=columns)
                 featured_eng_data.drop(columns="Freight_Cost_(USD)", inplace=True)
                 logging.info("Data Preprocessing Done!!!")
                 # Applying preprocessing object on the data
