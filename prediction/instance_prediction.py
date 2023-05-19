@@ -44,28 +44,18 @@ class instance_prediction_class:
     def __init__(self) -> None:
         pass
     
-    def preprocess_input(self,pack_price, unit_price, weight_kg, line_item_quantity, fulfill_via, shipment_mode, country, brand, sub_classification, first_line_designation):
+    def preprocess_input(self,data):
         # Convert categorical variables to numerical format
-        fulfill_via = FULFILL_VIA_MAP[fulfill_via]
-        shipment_mode = SHIPMENT_MODE_MAP[shipment_mode]
-        country = COUNTRY_MAP[country]
-        brand = BRAND_MAP[brand]
-        sub_classification = SUB_CLASSIFICATION_MAP[sub_classification]
-        first_line_designation = FIRST_LINE_DESIGNATION_MAP[first_line_designation]
-
+     
+        Fulfill_Via = FULFILL_VIA_MAP[Fulfill_Via]
+        Shipment_Mode = SHIPMENT_MODE_MAP[Shipment_Mode]
+        Country = COUNTRY_MAP[Country]
+        Brand = BRAND_MAP[Brand]
+        Sub_Classification = SUB_CLASSIFICATION_MAP[Sub_Classification]
+        First_Line_Designation = FIRST_LINE_DESIGNATION_MAP[First_Line_Designation]
+            
         # Create a DataFrame with the user input
-        user_input = pd.DataFrame({
-            'Pack_Price': [pack_price],
-            'Unit_Price': [unit_price],
-            'Weight_Kilograms_Clean': [weight_kg],
-            'Line_Item_Quantity': [line_item_quantity],
-            'Fulfill_Via': [fulfill_via],
-            'Shipment_Mode': [shipment_mode],
-            'Country': [country],
-            'Brand': [brand],
-            'Sub_Classification': [sub_classification],
-            'First_Line_Designation': [first_line_designation]
-        })
+        user_input = pd.DataFrame(data= data, index= [1,2,3,4,5,6,7,8,9,10])
 
         # Preprocess the user input using the preprocessor
         preprocessed_input = preprocessor.transform(user_input)
@@ -74,6 +64,7 @@ class instance_prediction_class:
         return preprocessed_input.toarray()
 
     def predict_price(preprocessed_input):
+        
         # Make a prediction using the pre-trained model
         predicted_price = model.predict(preprocessed_input)
 

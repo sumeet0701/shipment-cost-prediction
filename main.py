@@ -54,19 +54,21 @@ def bulk_predict():
 @cross_origin()
 def single_predict():
     try:   
-        data = {"pack_price" : int(request.form['pack-price']),
-                "unit_price" : float(request.form['unit-price']),
-                "weight_kg" : float(request.form['weight-kg']),
-                "line_item_quantity" : int(request.form['line-item-quantity']),
-                "fulfill_via" : request.form['fulfill-via'],
-                "shipment_mode" : request.form['shipment-mode'],
-                "country" : request.form['country'],
-                "brand" : request.form['brand'],
-                "sub_classification" : request.form['sub-classification'],
-                "first_line_designation" : request.form['first-line-designation']}
+        data = {"Pack_Price" : int(request.form['pack-price']),
+                "Unit_Price" : float(request.form['unit-price']),
+                "Weight_Kilograms_Clean" : float(request.form['weight-kg']),
+                "Line_Item_Quantity" : int(request.form['line-item-quantity']),
+                "Fulfill_Via" : request.form['fulfill-via'],
+                "Shipment_Mode" : request.form['shipment-mode'],
+                "Country" : request.form['country'],
+                "Brand" : request.form['brand'],
+                "Sub_Classification" : request.form['sub-classification'],
+                "First_Line_Designation" : request.form['first-line-designation']}
 
-        pred = Prediction_Pipeline()
-        output = pred.initiate_single_prediction(data)
+        pred = instance_prediction_class()
+        preprocess = pred.preprocess_input(data=data)          
+        output = pred.predict_price(preprocess)
+        #output = pred.preprocess_input(data)
         flash(f"Predicted Cost for Shipment for given conditions: {output}","success")
         return redirect(url_for('home'))
     except Exception as e:
