@@ -17,7 +17,7 @@ factors in the dataset.
 2. Visualization tools [matplotlib, seaborn etc.] will aid to get a better understanding of the data that we are working with. Afterwards, distinct regression models wiil be created. 
 3. Finally, We will evaluate these models using distinct perfomance metrics plus will try to get best Hyper prameters using Grid Search CV apporach and will select the best performing(most suitable) model for this specific dataset for predictions of heating load as well as cooling load of residential buildings."
 
-### dataset:
+## dataset:
 Kaggle: https://www.kaggle.com/datasets/divyeshardeshana/supply-chain-shipment-pricing-data
 
 
@@ -123,16 +123,16 @@ This package contains two modules:
                       will be called sequentially untill model is saved.
 2. Prediction Pipeline: This module will help getting prediction from saved trained model.
 
+## Web Application Buliding:
+![web Application](![App](https://github.com/sumeet0701/shipment-cost-prediction/assets/63961794/4ba8f4cc-3eb4-4139-afc4-e0e5a72f85f4)
+
 
 ## Project Archietecture
+![Supply Chain prediction](https://github.com/sumeet0701/shipment-cost-prediction/assets/63961794/4250b8d5-eab3-4351-83a4-6b16a1b5b899)
+
 
 ## Development Archietecture
-
-
-## previews Of web Applications
-
-
-
+![deploment](https://github.com/sumeet0701/shipment-cost-prediction/assets/63961794/5003354d-4024-4fc8-b21c-a5bd77acfe2f)
 
 
 ## Installation
@@ -195,4 +195,5 @@ http://localhost:5000
 ## Authors
 
 - [@Maheshwari Sumeet](https://github.com/sumeet0701)
+- [@ Hitesh Nimbalkar](https://github.com/Hitesh-Nimbalkar)
 
