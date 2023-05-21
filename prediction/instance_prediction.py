@@ -64,18 +64,18 @@ class instance_prediction_class:
         sub_classification = SUB_CLASSIFICATION_MAP[sub_classification]
         first_line_designation = FIRST_LINE_DESIGNATION_MAP[first_line_designation]
 
-        # Create a DataFrame with the user input
+        # Create a DataFrame with the user in
         user_input = pd.DataFrame({
             'Pack_Price': [pack_price],
+            'Fulfill_Via': [fulfill_via],
+            'First_Line_Designation': [first_line_designation],
             'Unit_Price': [unit_price],
             'Weight_Kilograms_Clean': [weight_kg],
-            'Line_Item_Quantity': [line_item_quantity],
-            'Fulfill_Via': [fulfill_via],
+            'Brand': [brand],
             'Shipment_Mode': [shipment_mode],
             'Country': [country],
-            'Brand': [brand],
             'Sub_Classification': [sub_classification],
-            'First_Line_Designation': [first_line_designation]
+            'Line_Item_Quantity': [line_item_quantity]
         })
 
         # Preprocess the user input using the preprocessor
