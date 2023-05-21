@@ -76,3 +76,10 @@ MODEL_TRAINER_TRAINED_MODEL_FILE_NAME_KEY = "model_file_name"
 # Prediction Related variables
 PREDICTION_DATA_SAVING_FOLDER_KEY = "predicted"
 APP_SECRET_KEY = "any random string"
+
+# batch_ prediction
+DATABASE_NAME = 'Shipment_Pricing'
+COLLECTION_NAME = "batch_Prediction"
+BATCH_PREDICTION = "batch_prediction\Prediction_files"
+INSTANCE_PREDICTION="Instance_prediction"
+BATCH_PREDICTION = "batch_prediction\Prediction_files"
