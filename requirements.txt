@@ -1,6 +1,6 @@
 pandas
 flask
-numpy
+nu
 scikit-learn
 sklearn
 xgboost
