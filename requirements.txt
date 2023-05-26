@@ -17,4 +17,5 @@ evidently
 skopt
 scikit-optimize
 optuna
+gunicorn
 -e.
