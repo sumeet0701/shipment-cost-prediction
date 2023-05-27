@@ -1,5 +1,5 @@
 from shipment_cost_prediction.logger import logging
-from shipment_cost_prediction.exception import ApplicationException
+from shipment_cost_prediction.exception import CustomException
 from sklearn.pipeline import Pipeline
 from shipment_cost_prediction.utils.utils import read_yaml_file
 from shipment_cost_prediction.constant import *
