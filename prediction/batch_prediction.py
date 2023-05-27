@@ -1,22 +1,34 @@
-import os
-import logging
 from shipment_cost_prediction.logger import logging
-from shipment_cost_prediction.exception import CustomException
-import pandas as pd
-import pickle
+from shipment_cost_prediction.exception import ApplicationException
 from sklearn.pipeline import Pipeline
 from shipment_cost_prediction.utils.utils import read_yaml_file
+from shipment_cost_prediction.constant import *
 from shipment_cost_prediction.entity.artifact_entity import ModelTrainerArtifact
 from shipment_cost_prediction.entity.artifact_entity import DataTransformationArtifact
+
+
+import os
+import logging
+import pandas as pd
+import pickle
 import sys 
 import pymongo
 import json
-from shipment_cost_prediction.constant import *
+import urllib
+import yaml
 
-# Provide the mongodb localhost url to connect python to mongodb.
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+env_file_path = os.path.join(ROOT_DIR, 'env.yaml')
 
+# Load environment variables from env.yaml
+with open(env_file_path) as file:
+    env_vars = yaml.safe_load(file)
+username = env_vars.get('USER_NAME')
+password = env_vars.get('PASS_WORD')
 
+# Use the escaped username and password in the MongoDB connection string
+mongo_db_url = f"mongodb+srv://{username}:{password}@rentalbike.5fi8zs7.mongodb.net/"
+
+client = pymongo.MongoClient(mongo_db_url)
 
 
 
@@ -146,3 +158,4 @@ class batch_prediction:
 
         except Exception as e:
             logging.error(f"Batch prediction failed due to an error: {str(e)}")
+
