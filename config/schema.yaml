@@ -41,19 +41,19 @@ ColumnNames:
 target_column: 
   - Freight_Cost_USD_Clean
 
+
 numerical_columns:
-  - Pack_Price
-  - Unit_Price
   - Weight_Kilograms_Clean
   - Line_Item_Quantity
+  - Line_Item_Value
   
 categorical_columns:
   - Fulfill_Via 
   - Shipment_Mode
   - Country
-  - Brand
+  - Dosage_Form
   - Sub_Classification
-  - First_Line_Designation
+  - Brand
 
 drop_columns:
   - ID
@@ -69,7 +69,6 @@ drop_columns:
   - Delivered_to_Client_Date
   - Delivery_Recorded_Date
   - Product_Group
-  - Line_Item_Value
   - Vendor
   - Item_Description
   - Molecule/Test_Type
@@ -79,10 +78,12 @@ drop_columns:
   - Line_Item_Insurance_(USD)
   - Manufacturing_Site
   - Unit_of_Measure_(Per_Pack)
-  - Dosage_Form
+  - Pack_Price
+  - Unit_Price
+  - First_Line_Designation
 
 
                               
 edited_column_labes :
-- Weight_Kilograms_Clean
-- Freight_Cost_USD_Clean
+ - Weight_Kilograms_Clean
+ - Freight_Cost_USD_Clean
