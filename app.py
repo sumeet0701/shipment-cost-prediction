@@ -23,8 +23,9 @@ BRAND_MAP = {'Generic': 0, 'Others': 1, 'Determine': 2, 'Uni-Gold': 3}
 
 UPLOAD_FOLDER = 'batch_prediction/Uploaded_CSV_FILE'
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder='template')
 ALLOWED_EXTENSIONS = {'csv'}
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
