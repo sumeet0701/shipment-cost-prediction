@@ -1,7 +1,7 @@
 pandas
 flask
 nu
-scikit-learn
+scikit-learngi
 sklearn
 xgboost
 yaml
