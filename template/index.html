@@ -10,7 +10,7 @@
             flex-direction: column;
             text-align: center;
             font-size: 18px;
-            background-image: url("/static/img/bikeshare_Adobe.jpg");
+            background-image: url("C:\Users\Sumeet Maheshwari\Desktop\end to end project\shipmet cost prediction\shipment-cost-prediction\static\img\bikeshare_Adobe.jpg");
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -122,7 +122,7 @@
         <!-- Batch Prediction Form -->
         <div class="left-content">
             <div class="prediction-container">
-                <img class="prediction-image" src="/static/img/batch-prediction.png" alt="Batch Prediction">
+                <img class="prediction-image" src="C:\Users\Sumeet Maheshwari\Desktop\end to end project\shipmet cost prediction\shipment-cost-prediction\static\img\batch-prediction.png" alt="Batch Prediction">
                 <h1>Batch Prediction</h1>
             </div>
             <form action="/batch" method="post" enctype="multipart/form-data">
@@ -139,14 +139,6 @@
                 <form action="/instance" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="prediction_type" value="instance">
                     <div class="input-label">
-                        <label for="pack_price">Pack Price:</label>
-                    </div>
-                    <input type="number" step="0.01" name="pack_price" required><br>
-                    <div class="input-label">
-                        <label for="unit_price">Unit Price:</label>
-                    </div>
-                    <input type="number" step="0.01" name="unit_price" required><br>
-                    <div class="input-label">
                         <label for="weight_kg">Weight (kg):</label>
                     </div>
                     <input type="number" step="0.01" name="weight_kg" required><br>
@@ -154,6 +146,10 @@
                         <label for="line_item_quantity">Line Item Quantity:</label>
                     </div>
                     <input type="number" name="line_item_quantity" required><br>
+                    <div class="input-label">
+                        <label for="line_item_value">Line Item Value:</label>
+                    </div>
+                    <input type="number" name="line_item_value" required><br>
                     <div class="input-label">
                         <label for="fulfill_via">Fulfill Via:</label>
                     </div>
@@ -209,11 +205,13 @@
                         <option value="ACT">ACT</option>
                     </select><br>
                     <div class="input-label">
-                        <label for="first_line_designation">First Line Designation:</label>
+                        <label for="dosage_form">Dosage Form:</label>
                     </div>
-                    <select name="first_line_designation" required>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
+                    <select name="dosage_form" required>
+                        <option value="Tablet">Tablet</option>
+                        <option value="Test kit">Test kit</option>
+                        <option value="Oral">Oral</option>
+                        <option value="Capsule">Capsule</option>
                     </select><br>
                     <input type="submit" value="Perform Instance Prediction">
                 </form>
@@ -226,7 +224,8 @@
             <h2 style="text-align: center;">Batch Prediction Result: {{ prediction_result }}</h2>
         {% endif %}
         {% if predicted_price %}
-            <h2 style="text-align: center;">Instance Prediction Result: {{ predicted_price }}</h2>
+             <h2 style="text-align: center;">Instance Prediction Result: ${{ predicted_price }}</h2>
+
         {% endif %}
     </div>
 </body>
